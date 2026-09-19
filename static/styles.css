@@ -20,16 +20,18 @@
   --orange: #ff9b37;
   --slate-light: #c5ccd6;
   --line: #b8bec8;
+  --display: Georgia, 'Times New Roman', serif;
   font-family: Arial, sans-serif;
 }
 
 * { box-sizing: border-box; }
-body { margin: 0; color: var(--ink); background: var(--paper); overflow-x: hidden; }
+body { margin: 0; color: var(--ink); background-color: #fff; background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 35px, rgba(197, 204, 214, .36) 35px, rgba(197, 204, 214, .36) 36px); overflow-x: hidden; }
 body.opendyslexic, body.opendyslexic * { font-family: 'OpenDyslexic', Arial, sans-serif; }
-.site-header { min-height: 100px; display: flex; align-items: center; justify-content: space-between; padding: 18px clamp(22px, 9vw, 96px); color: white; background: var(--slate); border-bottom: 3px solid var(--orange); }
-.brand { font-size: clamp(1.55rem, 3vw, 2.6rem); letter-spacing: .01em; }
-.brand span { font-weight: 400; }
-.knight-mark { width: 62px; height: 62px; object-fit: contain; }
+.site-header { min-height: 150px; display: flex; align-items: center; justify-content: space-between; padding: 18px clamp(22px, 9vw, 96px); color: white; background: var(--slate); border-bottom: 3px solid var(--orange); }
+.brand { display: flex; align-items: baseline; gap: 12px; font-family: var(--display); letter-spacing: .01em; }
+.brand strong { color: var(--gold); font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 700; }
+.brand span { color: white; font: 700 .82rem/1 Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+.knight-mark { width: 100px; height: 100px; object-fit: contain; }
 .shell { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 0 0 80px; }
 .hero { position: relative; left: 8px; width: calc(100vw - 16px); margin: 0 calc(50% - 50vw) 42px; padding: 42px max(20px, calc(50vw - 530px)) 54px; color: white; background: var(--gold); }
 .eyebrow { color: var(--orange); font: 700 .75rem/1.2 Arial, sans-serif; letter-spacing: .12em; margin: 0 0 14px; }
@@ -98,6 +100,11 @@ pre { white-space: pre-wrap; font: .95rem/1.6 Georgia, serif; font-weight: 400; 
 .tutor-form label { color: var(--ink); font-weight: 700; }
 .tutor-form textarea { width: 100%; resize: vertical; border: 1px solid var(--line); padding: 10px; color: var(--ink); font: .95rem/1.4 Arial, sans-serif; }
 .tutor-form button { justify-self: start; background: var(--orange); color: var(--ink); padding: 12px 16px; }
+.site-footer { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 112px; padding: 24px clamp(22px, 9vw, 96px); color: white; background: var(--slate); border-top: 3px solid var(--orange); }
+.site-footer div { display: flex; align-items: baseline; gap: 10px; font-family: var(--display); }
+.site-footer strong { color: var(--gold); font-size: 1.65rem; }
+.site-footer span { font: 700 .72rem/1 Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+.site-footer p { margin: 0; color: var(--slate-light); font: .85rem/1.4 Arial, sans-serif; }
 @keyframes reveal { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 920px) { .workspace { grid-template-columns: 1fr; } }
-@media (max-width: 760px) { .shell { width: min(100% - 26px, 600px); } .site-header { padding-inline: 20px; } .brand span { display: block; font-size: .8em; } .hero { left: 0; width: auto; margin-inline: -13px; padding-inline: 20px; } .panel { padding: 21px; box-shadow: 5px 5px 0 var(--slate-light); } .result-heading { flex-direction: column; } .download { width: 100%; } }
+@media (max-width: 760px) { .shell { width: min(100% - 26px, 600px); } .site-header { padding-inline: 20px; } .brand { align-items: flex-start; flex-direction: column; gap: 4px; } .brand strong { font-size: 2rem; } .brand span { font-size: .68rem; } .hero { left: 0; width: auto; margin-inline: -13px; padding-inline: 20px; } .panel { padding: 21px; box-shadow: 5px 5px 0 var(--slate-light); } .result-heading { flex-direction: column; } .download { width: 100%; } .site-footer { align-items: flex-start; flex-direction: column; padding-inline: 20px; } }

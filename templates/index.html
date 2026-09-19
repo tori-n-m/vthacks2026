@@ -8,7 +8,7 @@
 </head>
 <body>
   <header class="site-header">
-    <div class="brand">Mane Frame <span>Special ADA Tool</span></div>
+    <div class="brand" aria-label="reframeAI by ManeFrame"><strong>reframeAI</strong><span>by ManeFrame</span></div>
     <img class="knight-mark" src="{{ url_for('image_asset', filename='knight.png') }}" alt="Mane Frame knight logo">
   </header>
   <main class="shell">
@@ -96,6 +96,10 @@
       </section>
     </section>
   </main>
+  <footer class="site-footer">
+    <div><strong>reframeAI</strong><span>by ManeFrame</span></div>
+    <p>Accessible tools for clearer learning.</p>
+  </footer>
   <script src="{{ url_for('static', filename='app.js') }}"></script>
 </body>
 </html>
