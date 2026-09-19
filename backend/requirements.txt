@@ -2,3 +2,4 @@ Flask
 python-dotenv
 gunicorn
 flask-cors
+python-docx
