@@ -33,11 +33,6 @@ Hosting	[GitHub Pages / Netlify / Render: fill in]
 └── docs/        # pitch notes and extra documentation
 ```
 🚀 Getting Started
-Prerequisites
-Python 3.9+
-Git
-A code editor such as VS Code
-An API key for [your AI provider]
 1. Clone the repo
 ```bash
 git clone https://github.com/[your-username]/[repo-name].git
@@ -68,6 +63,11 @@ GET	`/`	Document upload page
 GET	`/styles`	Available reading styles
 POST	`/summarize`	Multipart upload; returns the summary and full rewrite
 POST	`/download`	Returns a downloadable `.txt` containing both outputs
+<<<<<<< HEAD
+=======
+4. Start the front end
+Open the `frontend/` folder in VS Code, right-click `index.html`, and choose Open with Live Server. (Or just double-click `index.html` to open it in your browser.)
+>>>>>>> origin/main
 🔌 API Endpoints
 Method	Endpoint	What it does
 POST	`/summarize`	Takes text and returns a simplified summary
