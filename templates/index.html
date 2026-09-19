@@ -7,23 +7,28 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+  <header class="site-header">
+    <div class="brand">Mane Frame <span>Special ADA Tool</span></div>
+    <img class="knight-mark" src="{{ url_for('image_asset', filename='knight.png') }}" alt="Mane Frame knight logo">
+  </header>
   <main class="shell">
-    <header class="intro">
-      <p class="eyebrow">CLEARSTUDY / DOCUMENT TOOL</p>
-      <h1>Make dense documents easier to use.</h1>
-      <p class="lede">Upload a class document for a bullet summary and a complete plain-language rewrite.</p>
-    </header>
+    <section class="hero">
+      <p class="eyebrow">DOCUMENT ACCESSIBILITY TOOL</p>
+      <h1>Make school documents easier to understand.</h1>
+      <p class="lede">Upload a textbook, worksheet, or image and turn it into clear study material built around the way you learn.</p>
+    </section>
 
     <section class="workspace" aria-label="Document simplifier">
       <form id="upload-form" class="panel">
-        <div class="step"><span>01</span><h2>Choose a document</h2></div>
+        <div class="step"><span>01</span><h2>Upload your document</h2></div>
         <label class="drop-zone" for="document">
           <input id="document" name="document" type="file" accept=".pdf,.docx,.txt,.md,.png,.jpg,.jpeg,.webp" required>
-          <strong id="file-name">Drop a file here or browse</strong>
+          <img src="{{ url_for('image_asset', filename='uploadbutton.png') }}" alt="" class="control-art upload-art">
+          <strong id="file-name">Choose a file to upload</strong>
           <small>PDF, Word, TXT, Markdown, or image files · up to 25 MB</small>
         </label>
 
-        <div class="step"><span>02</span><h2>Set your reading style</h2></div>
+        <div class="step"><span>02</span><h2>Choose your support</h2></div>
         <label for="style">How should the rewrite feel?</label>
         <select id="style" name="style">
           <option value="general">General plain language</option>
@@ -42,12 +47,12 @@
           <span class="tutor-checkmark" aria-hidden="true"></span>
           <span><strong>Socratic tutor mode</strong><small>Get guided questions and hints that help you discover the document's ideas without giving away the answers.</small></span>
         </label>
-        <button id="submit-button" type="submit">Generate my versions <span aria-hidden="true">→</span></button>
+        <button id="submit-button" type="submit"><img src="{{ url_for('image_asset', filename='sparkle.png') }}" alt=""> Generate my versions <span aria-hidden="true">→</span></button>
         <p id="status" class="status" role="status"></p>
       </form>
 
       <section id="results" class="panel results" hidden aria-live="polite">
-        <div class="result-heading"><div><p class="eyebrow">YOUR RESULTS</p><h2 id="result-title">Ready</h2></div><button id="download-button" class="download" type="button">Download file ↓</button></div>
+        <div class="result-heading"><div><p class="eyebrow">YOUR RESULTS</p><h2 id="result-title">Ready</h2></div><button id="download-button" class="download" type="button"><img src="{{ url_for('image_asset', filename='downloadinstructions.png') }}" alt=""> Download Word file</button></div>
         <div class="summary-block takeaway"><h3>Main idea</h3><p id="one-sentence"></p></div>
         <details class="summary-block">
           <summary>Detailed summary</summary>
