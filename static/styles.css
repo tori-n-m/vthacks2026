@@ -1,49 +1,59 @@
 :root {
   color-scheme: light;
-  --ink: #172121;
-  --muted: #617070;
-  --paper: #f8f5ee;
-  --panel: #fffdf8;
-  --mint: #b9e5d4;
-  --coral: #ee755d;
-  --line: #d7ded7;
+  /* Item Colors */
+  --headercolor: #4a4d58
+  --buttoncolor: #FF9B37 
+  --ourgold: #deb368
+
+  /* Text Colors */
+  --textcolor: #faf1eb
+  --link-color: #d2d2c7;
+  /*
+  - I think we might not use these.
+  --link-hover: #8093c9;
+  --link-visited: #b4b4b4;
+  */
+
+  /* Text Styling */
+  --font: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  --padding-var: 10px;
   font-family: Georgia, 'Times New Roman', serif;
 }
 
-* { box-sizing: border-box; }
-body { margin: 0; color: var(--ink); background: radial-gradient(circle at 85% 0%, #d8eee4 0, transparent 28rem), var(--paper); }
-.shell { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 54px 0 80px; }
-.intro { max-width: 700px; margin-bottom: 42px; }
-.eyebrow { color: #52706a; font: 700 0.72rem/1.2 Arial, sans-serif; letter-spacing: 0.12em; margin: 0 0 14px; }
-h1 { font-size: clamp(2.6rem, 7vw, 5.8rem); line-height: .95; letter-spacing: 0; margin: 0 0 20px; font-weight: 500; }
-.lede { color: var(--muted); font: 1.1rem/1.55 Arial, sans-serif; max-width: 560px; }
-.workspace { display: grid; grid-template-columns: minmax(280px, .8fr) minmax(320px, 1.2fr); gap: 22px; align-items: start; }
-.panel { background: color-mix(in srgb, var(--panel) 92%, transparent); border: 1px solid var(--line); padding: 28px; box-shadow: 8px 8px 0 #d8e9df; }
-.step { display: flex; align-items: baseline; gap: 13px; margin: 4px 0 18px; }
-.step span { color: var(--coral); font: 700 .8rem Arial, sans-serif; }
-h2 { font-size: 1.55rem; font-weight: 500; margin: 0; }
-h3 { font-size: 1.05rem; margin: 0 0 10px; }
-.drop-zone { border: 1.5px dashed #9aafa6; min-height: 155px; padding: 25px; display: flex; flex-direction: column; justify-content: center; gap: 9px; cursor: pointer; background: #f5faf5; margin-bottom: 36px; }
-.drop-zone:hover, .drop-zone:focus-within { border-color: var(--coral); background: #fff8f1; }
-.drop-zone input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-.drop-zone strong { font-size: 1.2rem; }
-.drop-zone small, label, select, button, .status { font-family: Arial, sans-serif; }
-.drop-zone small, label { color: var(--muted); font-size: .85rem; }
-select { display: block; width: 100%; padding: 13px 12px; margin: 8px 0 20px; border: 1px solid var(--line); background: white; color: var(--ink); font-size: .95rem; }
-button { border: 0; cursor: pointer; font-weight: 700; }
-#submit-button { background: var(--coral); color: #fff; width: 100%; padding: 15px; font-size: .95rem; }
-#submit-button:hover { background: #d95e49; }
-#submit-button span { font-size: 1.2rem; margin-left: 8px; }
-.status { min-height: 1.2em; color: var(--muted); font-size: .85rem; }
-.results { animation: reveal .35s ease-out; }
-.result-heading { display: flex; justify-content: space-between; align-items: start; gap: 15px; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
-.result-heading h2 { overflow-wrap: anywhere; }
-.download { white-space: nowrap; background: var(--mint); color: var(--ink); padding: 12px 14px; }
-.summary-block { padding: 20px 0; border-bottom: 1px solid var(--line); font: .98rem/1.55 Arial, sans-serif; }
-.summary-block p { margin: 0; }
-ul { padding-left: 20px; margin: 8px 0 0; } li { margin: 7px 0; }
-details { padding-top: 20px; font: 700 .95rem Arial, sans-serif; }
-summary { cursor: pointer; }
-pre { white-space: pre-wrap; font: .95rem/1.6 Georgia, serif; font-weight: 400; margin: 16px 0 0; }
-@keyframes reveal { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-@media (max-width: 760px) { .shell { width: min(100% - 26px, 600px); padding-top: 32px; } .workspace { grid-template-columns: 1fr; } .panel { padding: 21px; box-shadow: 5px 5px 0 #d8e9df; } .result-heading { flex-direction: column; } .download { width: 100%; } }
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-image: var(--bg-image);
+  width: 100%;
+  padding: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: fit-content;
+}
+
+/* Main items */
+header {
+  background-color: var(--headercolor);
+  /* TODO: add a size and width */
+}
+
+/* Text Items */
+p {
+  font-size: 0.75rem;
+  font: var(--font);
+  color: var(--textcolor);
+  text-wrap: pretty;
+}
+
+/* Screen-size Accessibility */
+@media only screen and (max-width: 1000px) {
+  .container {
+      max-width: 90%;
+      grid-template:
+          "header"
+          "main";
+  }
+}
