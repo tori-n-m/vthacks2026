@@ -65,6 +65,9 @@ For each, give the word and a simple meaning in a short phrase.
 if the document mentions any. Use an empty list if there are none.
 - image_descriptions: Use an empty list unless image description was requested. \
 If it was requested, describe each meaningful image objectively.
+- tutor_questions: Use an empty list unless Socratic tutor mode was requested. \
+If requested, create progressive questions that help the student discover the \
+document's ideas. Do not include final answers.
 - simplified_document: Rewrite the entire document in the same order. Start \
 with a short heading, then rewrite every original section, heading, paragraph, \
 list, example, instruction, date, number, name, and important detail. Keep the \
@@ -87,6 +90,29 @@ when text or a visual detail cannot be read. Use an empty list only when the \
 document contains no images or image-based information.
 """
 
+SOCRATIC_TUTOR_PROMPT = """
+- tutor_questions: Create 5 to 8 progressive Socratic tutor questions based only \
+on this document. Start with basic facts, then move toward connections, \
+evidence, reasoning, and application. Each question should make the student \
+think instead of asking them to copy a sentence. For each question, give a brief \
+hint without revealing the answer, and name the skill being practiced, such as \
+recall, explain, compare, infer, or apply. Use short, clear language suitable \
+for a student with a learning disability. Use an empty list when tutor mode was \
+not requested.
+"""
+
+TUTOR_CHAT_SYSTEM_INSTRUCTION = """
+You are a patient Socratic tutor for a student with a learning disability.
+Use only the uploaded document as your source. Help the student reason instead
+of doing the work for them. First acknowledge what they are asking in plain
+language. Then give a short explanation only when needed, ask one focused next
+question, and provide a brief hint that points to the relevant part of the
+document without revealing the answer. Use short sentences, one idea at a
+time. Never invent information. If the question is unrelated, kindly redirect
+the student to the document. If the student is stuck after trying, give a
+slightly stronger hint, but still preserve the chance to think.
+"""
+
 
 def get_system_instruction(style: str = DEFAULT_STYLE) -> str:
     """Base rules + the notes for the chosen style."""
@@ -95,6 +121,28 @@ def get_system_instruction(style: str = DEFAULT_STYLE) -> str:
     return f"{BASE_SYSTEM_INSTRUCTION}\nStyle for this student: {STYLE_NOTES[style]}"
 
 
-def get_user_prompt(describe_images: bool = False) -> str:
-    """Return the document task, optionally including image descriptions."""
-    return USER_PROMPT + (IMAGE_PROMPT if describe_images else "")
+def get_user_prompt(describe_images: bool = False, socratic_tutor: bool = False) -> str:
+    """Return the document task with optional learning-support modes."""
+    prompt = USER_PROMPT
+    if describe_images:
+        prompt += IMAGE_PROMPT
+    if socratic_tutor:
+        prompt += SOCRATIC_TUTOR_PROMPT
+    return prompt
+
+
+def get_tutor_chat_prompt(question: str, history: str = "") -> str:
+    """Build one document-grounded Socratic tutor turn."""
+    return f"""{TUTOR_CHAT_SYSTEM_INSTRUCTION}
+
+Previous conversation:
+{history or '(no previous conversation)'}
+
+Student's new question:
+{question}
+
+Return:
+- response: A short, encouraging response grounded in the document.
+- next_question: One focused Socratic question for the student.
+- hint: One brief hint that does not reveal the answer.
+"""

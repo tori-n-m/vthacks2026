@@ -19,6 +19,7 @@ Every summarize function NEVER raises an error. It always returns a dict:
         "important_words": [{"word": "...", "meaning": "..."}],
         "next_steps":      ["...", "..."],
         "image_descriptions": ["Useful, objective descriptions of important images."],
+        "tutor_questions": [{"question": "...", "hint": "...", "skill": "..."}],
         "simplified_document": "The complete document rewritten in plain language.",
     }
 
@@ -48,6 +49,7 @@ try:
         DEFAULT_STYLE,
         STYLE_LABELS,
         get_system_instruction,
+        get_tutor_chat_prompt,
         get_user_prompt,
     )
 except ImportError:
@@ -55,6 +57,7 @@ except ImportError:
         DEFAULT_STYLE,
         STYLE_LABELS,
         get_system_instruction,
+        get_tutor_chat_prompt,
         get_user_prompt,
     )
 
@@ -79,6 +82,18 @@ class ImportantWord(BaseModel):
     meaning: str
 
 
+class TutorQuestion(BaseModel):
+    question: str
+    hint: str
+    skill: str
+
+
+class TutorReply(BaseModel):
+    response: str
+    next_question: str
+    hint: str
+
+
 class DocumentSummary(BaseModel):
     one_sentence: str
     key_points: List[str]
@@ -86,7 +101,23 @@ class DocumentSummary(BaseModel):
     important_words: List[ImportantWord]
     next_steps: List[str]
     image_descriptions: List[str]
+    tutor_questions: List[TutorQuestion]
     simplified_document: str
+
+
+def _document_content(file_bytes: bytes, filename: str):
+    """Create the Gemini content part or text for an uploaded document."""
+    ext = Path(filename or "").suffix.lower()
+    if ext == ".pdf" or ext in IMAGE_TYPES:
+        mime_type = "application/pdf" if ext == ".pdf" else f"image/{'jpeg' if ext in {'.jpg', '.jpeg'} else ext[1:]}"
+        return types.Part.from_bytes(data=file_bytes, mime_type=mime_type)
+    if ext == ".docx":
+        text = _read_docx(file_bytes)
+    else:
+        text = file_bytes.decode("utf-8", errors="ignore")
+    if not text.strip():
+        raise ValueError("I couldn't find any text in that file.")
+    return text[:MAX_CHARS]
 
 
 # ---------- Small helpers ----------
@@ -139,14 +170,19 @@ def _generate_with_retry(**kwargs):
             time.sleep(RETRY_WAITS[attempt])
 
 
-def _summarize(document_content, style: str, describe_images: bool = False) -> dict:
+def _summarize(
+    document_content,
+    style: str,
+    describe_images: bool = False,
+    socratic_tutor: bool = False,
+) -> dict:
     """Send the document to Gemini and return the standard result dict."""
     if style not in STYLE_LABELS:
         style = DEFAULT_STYLE
 
     response = _generate_with_retry(
         model=MODEL_NAME,
-        contents=[get_user_prompt(describe_images), document_content],
+        contents=[get_user_prompt(describe_images, socratic_tutor), document_content],
         config=types.GenerateContentConfig(
             system_instruction=get_system_instruction(style),
             temperature=0.3,  # low = more faithful to the document
@@ -201,6 +237,7 @@ def summarize_document(
     filename: str,
     style: str = DEFAULT_STYLE,
     describe_images: bool = False,
+    socratic_tutor: bool = False,
 ) -> dict:
     """Summarize an uploaded document or image."""
     try:
@@ -224,6 +261,54 @@ def summarize_document(
                 return _error("I couldn't find any text in that file.")
             content = text[:MAX_CHARS]
 
-        return _summarize(content, style, describe_images)
+        return _summarize(content, style, describe_images, socratic_tutor)
     except Exception as exc:
         return _friendly_error(exc)
+
+
+def tutor_chat(
+    file_bytes: bytes,
+    filename: str,
+    question: str,
+    history: list[dict] | None = None,
+) -> dict:
+    """Answer one Socratic tutor turn using the uploaded document as context."""
+    try:
+        if not question or not question.strip():
+            return {"ok": False, "reply": None, "error": "Ask the tutor a question first."}
+        ext = Path(filename or "").suffix.lower()
+        if ext not in SUPPORTED_TYPES:
+            return {"ok": False, "reply": None, "error": "That document type is not supported."}
+        if not file_bytes:
+            return {"ok": False, "reply": None, "error": "The uploaded document is empty."}
+        if len(file_bytes) > MAX_FILE_MB * 1024 * 1024:
+            return {"ok": False, "reply": None, "error": f"That file is too big. Please use one under {MAX_FILE_MB} MB."}
+
+        prior_turns = []
+        for turn in (history or [])[-6:]:
+            role = "Student" if turn.get("role") == "student" else "Tutor"
+            content = str(turn.get("content", "")).strip()
+            if content:
+                prior_turns.append(f"{role}: {content[:2000]}")
+
+        response = _generate_with_retry(
+            model=MODEL_NAME,
+            contents=[
+                get_tutor_chat_prompt(question.strip(), "\n".join(prior_turns)),
+                _document_content(file_bytes, filename),
+            ],
+            config=types.GenerateContentConfig(
+                temperature=0.4,
+                response_mime_type="application/json",
+                response_schema=TutorReply,
+            ),
+        )
+        parsed = response.parsed
+        if parsed is None and response.text:
+            parsed = TutorReply(**json.loads(response.text))
+        if parsed is None:
+            return {"ok": False, "reply": None, "error": "The tutor could not answer. Please try again."}
+        return {"ok": True, "reply": parsed.model_dump(), "error": None}
+    except Exception as exc:
+        result = _friendly_error(exc)
+        return {"ok": False, "reply": None, "error": result["error"]}

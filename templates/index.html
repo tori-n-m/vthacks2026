@@ -27,12 +27,20 @@
         <label for="style">How should the rewrite feel?</label>
         <select id="style" name="style">
           <option value="general">General plain language</option>
-          <option value="dyslexia">Dyslexia-friendly</option>
           <option value="adhd">ADHD-friendly, short and focused</option>
         </select>
+        <label class="check-option" for="dyslexia-font">
+          <input id="dyslexia-font" name="dyslexia_font" type="checkbox">
+          <span><strong>Use OpenDyslexic font</strong><small>Apply the OpenDyslexic typeface to the page and results.</small></span>
+        </label>
         <label class="check-option" for="describe-images">
           <input id="describe-images" name="describe_images" type="checkbox">
           <span><strong>Describe images for screen readers</strong><small>Explain the visible content, layout, labels, text, and data in detail.</small></span>
+        </label>
+        <label class="check-option tutor-option" for="socratic-tutor">
+          <input id="socratic-tutor" name="socratic_tutor" type="checkbox">
+          <span class="tutor-checkmark" aria-hidden="true"></span>
+          <span><strong>Socratic tutor mode</strong><small>Get guided questions and hints that help you discover the document's ideas without giving away the answers.</small></span>
         </label>
         <button id="submit-button" type="submit">Generate my versions <span aria-hidden="true">→</span></button>
         <p id="status" class="status" role="status"></p>
@@ -40,11 +48,46 @@
 
       <section id="results" class="panel results" hidden aria-live="polite">
         <div class="result-heading"><div><p class="eyebrow">YOUR RESULTS</p><h2 id="result-title">Ready</h2></div><button id="download-button" class="download" type="button">Download file ↓</button></div>
-        <div class="summary-block"><h3>Summary</h3><p id="one-sentence"></p><ul id="key-points"></ul><p id="detailed-summary"></p></div>
-        <div class="summary-block"><h3>Important words</h3><ul id="important-words"></ul></div>
-        <div class="summary-block"><h3>Image descriptions</h3><ul id="image-descriptions"></ul></div>
-        <div class="summary-block"><h3>Next steps</h3><ul id="next-steps"></ul></div>
-        <details><summary>Preview full simplified document</summary><pre id="simplified-document"></pre></details>
+        <div class="summary-block takeaway"><h3>Main idea</h3><p id="one-sentence"></p></div>
+        <details class="summary-block">
+          <summary>Detailed summary</summary>
+          <p id="detailed-summary"></p>
+        </details>
+        <details class="summary-block">
+          <summary>Key points</summary>
+          <ul id="key-points"></ul>
+        </details>
+        <details class="summary-block">
+          <summary>Important words</summary>
+          <ul id="important-words"></ul>
+        </details>
+        <details class="summary-block">
+          <summary>Image descriptions</summary>
+          <ul id="image-descriptions"></ul>
+        </details>
+        <details class="summary-block">
+          <summary>Next steps</summary>
+          <ul id="next-steps"></ul>
+        </details>
+        <details class="summary-block">
+          <summary>Socratic tutor questions</summary>
+          <ol id="tutor-questions"></ol>
+        </details>
+        <section id="tutor-chat" class="tutor-chat" hidden aria-labelledby="tutor-chat-title">
+          <h3 id="tutor-chat-title">Ask the document tutor</h3>
+          <p class="tutor-intro">Ask about the uploaded document. The tutor will guide your thinking instead of giving away the answer.</p>
+          <div id="chat-messages" class="chat-messages" aria-live="polite"></div>
+          <form id="tutor-form" class="tutor-form">
+            <label for="tutor-question">Your question</label>
+            <textarea id="tutor-question" rows="3" placeholder="What part would you like help understanding?" required></textarea>
+            <button type="submit">Ask tutor <span aria-hidden="true">→</span></button>
+          </form>
+          <p id="tutor-status" class="status" role="status"></p>
+        </section>
+        <details class="summary-block">
+          <summary>Preview full simplified document</summary>
+          <pre id="simplified-document"></pre>
+        </details>
       </section>
     </section>
   </main>

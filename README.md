@@ -56,13 +56,13 @@ python app.py
 The server runs at `http://localhost:5000`.
 Open that address in a browser. Upload a PDF, Word, TXT, or Markdown document,
 choose a reading style, and generate both a bullet summary and a complete
-plain-language rewrite. The **Download file** button saves both in one text file.
+plain-language rewrite. The **Download file** button saves both in a Word document.
 🔌 API Endpoints
 Method	Endpoint	What it does
 GET	`/`	Document upload page
 GET	`/styles`	Available reading styles
 POST	`/summarize`	Multipart upload; returns the summary and full rewrite
-POST	`/download`	Returns a downloadable `.txt` containing both outputs
+POST	`/download`	Returns a downloadable `.docx` containing both outputs
 <<<<<<< HEAD
 =======
 4. Start the front end

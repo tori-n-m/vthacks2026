@@ -1,3 +1,14 @@
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('https://cdn.jsdelivr.net/gh/antijingoist/open-dyslexic@master/woff/OpenDyslexic-Regular.woff') format('woff');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('https://cdn.jsdelivr.net/gh/antijingoist/open-dyslexic@master/woff/OpenDyslexic-Bold.woff') format('woff');
+  font-weight: 700;
+}
+
 :root {
   color-scheme: light;
   --ink: #172121;
@@ -12,6 +23,7 @@
 
 * { box-sizing: border-box; }
 body { margin: 0; color: var(--ink); background: radial-gradient(circle at 85% 0%, #d8eee4 0, transparent 28rem), var(--paper); }
+body.opendyslexic, body.opendyslexic * { font-family: 'OpenDyslexic', Arial, sans-serif; }
 .shell { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 54px 0 80px; }
 .intro { max-width: 700px; margin-bottom: 42px; }
 .eyebrow { color: #52706a; font: 700 0.72rem/1.2 Arial, sans-serif; letter-spacing: 0.12em; margin: 0 0 14px; }
@@ -34,6 +46,13 @@ select { display: block; width: 100%; padding: 13px 12px; margin: 8px 0 20px; bo
 .check-option input { width: 18px; height: 18px; margin: 1px 0 0; accent-color: var(--coral); }
 .check-option span { display: flex; flex-direction: column; gap: 4px; }
 .check-option strong { color: var(--ink); font-size: .95rem; }
+.tutor-option { padding: 12px; border: 1px solid #b9d8c7; background: #eef8f1; }
+.tutor-option input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.tutor-checkmark { flex: 0 0 22px; width: 22px; height: 22px; border: 2px solid #267a58; background: white; position: relative; margin-top: 1px; }
+.tutor-option input:checked + .tutor-checkmark { background: #267a58; }
+.tutor-option input:checked + .tutor-checkmark::after { content: '✓'; position: absolute; inset: -3px 0 0; color: white; font: 700 20px/22px Arial, sans-serif; text-align: center; }
+.tutor-option strong { color: #1d6247; }
+.tutor-option:has(input:focus-visible) { outline: 3px solid #b9e5d4; outline-offset: 2px; }
 button { border: 0; cursor: pointer; font-weight: 700; }
 #submit-button { background: var(--coral); color: #fff; width: 100%; padding: 15px; font-size: .95rem; }
 #submit-button:hover { background: #d95e49; }
@@ -45,9 +64,28 @@ button { border: 0; cursor: pointer; font-weight: 700; }
 .download { white-space: nowrap; background: var(--mint); color: var(--ink); padding: 12px 14px; }
 .summary-block { padding: 20px 0; border-bottom: 1px solid var(--line); font: .98rem/1.55 Arial, sans-serif; }
 .summary-block p { margin: 0; }
+.summary-block summary { color: var(--ink); font-weight: 700; list-style-position: outside; }
+.summary-block summary::marker { color: var(--coral); }
+.summary-block summary:focus-visible { outline: 3px solid var(--mint); outline-offset: 5px; }
+.summary-block[open] summary { margin-bottom: 14px; }
+.takeaway { background: #f5faf5; padding: 20px; border-left: 4px solid var(--coral); }
 ul { padding-left: 20px; margin: 8px 0 0; } li { margin: 7px 0; }
-details { padding-top: 20px; font: 700 .95rem Arial, sans-serif; }
+ol { padding-left: 24px; margin: 8px 0 0; }
+ol li { padding-left: 4px; }
+ol li p { color: var(--muted); font-size: .9rem; margin-top: 4px; }
+details { font: .95rem/1.55 Arial, sans-serif; }
 summary { cursor: pointer; }
 pre { white-space: pre-wrap; font: .95rem/1.6 Georgia, serif; font-weight: 400; margin: 16px 0 0; }
+.tutor-chat { margin-top: 24px; padding: 20px; background: #f5faf5; border: 1px solid var(--line); }
+.tutor-chat h3 { margin-bottom: 6px; }
+.tutor-intro { color: var(--muted); font: .9rem/1.45 Arial, sans-serif; margin: 0 0 16px; }
+.chat-messages { display: flex; flex-direction: column; gap: 10px; max-height: 340px; overflow-y: auto; margin-bottom: 16px; }
+.chat-message { white-space: pre-wrap; padding: 11px 13px; font: .92rem/1.5 Arial, sans-serif; }
+.chat-message.student { align-self: flex-end; max-width: 88%; background: var(--mint); }
+.chat-message.tutor { align-self: flex-start; max-width: 92%; background: white; border: 1px solid var(--line); }
+.tutor-form { display: grid; gap: 8px; }
+.tutor-form label { color: var(--ink); font-weight: 700; }
+.tutor-form textarea { width: 100%; resize: vertical; border: 1px solid var(--line); padding: 10px; color: var(--ink); font: .95rem/1.4 Arial, sans-serif; }
+.tutor-form button { justify-self: start; background: var(--coral); color: white; padding: 12px 16px; }
 @keyframes reveal { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 760px) { .shell { width: min(100% - 26px, 600px); padding-top: 32px; } .workspace { grid-template-columns: 1fr; } .panel { padding: 21px; box-shadow: 5px 5px 0 #d8e9df; } .result-heading { flex-direction: column; } .download { width: 100%; } }
