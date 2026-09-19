@@ -15,8 +15,10 @@ Every summarize function NEVER raises an error. It always returns a dict:
     summary = {
         "one_sentence":    "The main idea in one short sentence.",
         "key_points":      ["...", "..."],
+        "detailed_summary": "A thorough explanation of the document's main ideas.",
         "important_words": [{"word": "...", "meaning": "..."}],
         "next_steps":      ["...", "..."],
+        "image_descriptions": ["Useful, objective descriptions of important images."],
         "simplified_document": "The complete document rewritten in plain language.",
     }
 
@@ -64,9 +66,10 @@ load_dotenv()  # also checks the current folder, doesn't override
 # Model name can be changed in .env without editing code
 MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 
-SUPPORTED_TYPES = {".txt", ".md", ".pdf", ".docx"}
-MAX_FILE_MB = 10
-MAX_CHARS = 60_000  # keeps requests small and fast
+SUPPORTED_TYPES = {".txt", ".md", ".pdf", ".docx", ".png", ".jpg", ".jpeg", ".webp"}
+IMAGE_TYPES = {".png", ".jpg", ".jpeg", ".webp"}
+MAX_FILE_MB = 25
+MAX_CHARS = 200_000  # allows detailed text rewrites while bounding request size
 
 
 # ---------- The shape Gemini must answer in ----------
@@ -79,8 +82,10 @@ class ImportantWord(BaseModel):
 class DocumentSummary(BaseModel):
     one_sentence: str
     key_points: List[str]
+    detailed_summary: str
     important_words: List[ImportantWord]
     next_steps: List[str]
+    image_descriptions: List[str]
     simplified_document: str
 
 
@@ -124,22 +129,24 @@ def _generate_with_retry(**kwargs):
         try:
             return _get_client().models.generate_content(**kwargs)
         except Exception as exc:
-            busy = any(code in str(exc) for code in
-                       ("503", "UNAVAILABLE", "429", "RESOURCE_EXHAUSTED"))
+            error_text = str(exc)
+            if "RESOURCE_EXHAUSTED" in error_text or "quota" in error_text.lower():
+                raise
+            busy = any(code in error_text for code in ("503", "UNAVAILABLE", "429"))
             if not busy or attempt == len(RETRY_WAITS):
                 raise
             print(f"[ai_service] Gemini is busy, retrying in {RETRY_WAITS[attempt]}s...")
             time.sleep(RETRY_WAITS[attempt])
 
 
-def _summarize(document_content, style: str) -> dict:
+def _summarize(document_content, style: str, describe_images: bool = False) -> dict:
     """Send the document to Gemini and return the standard result dict."""
     if style not in STYLE_LABELS:
         style = DEFAULT_STYLE
 
     response = _generate_with_retry(
         model=MODEL_NAME,
-        contents=[get_user_prompt(), document_content],
+        contents=[get_user_prompt(describe_images), document_content],
         config=types.GenerateContentConfig(
             system_instruction=get_system_instruction(style),
             temperature=0.3,  # low = more faithful to the document
@@ -165,6 +172,8 @@ def _friendly_error(exc: Exception) -> dict:
         return _error("The AI isn't set up yet (missing API key).")
     if "401" in text or "UNAUTHENTICATED" in text or "ACCESS_TOKEN_TYPE_UNSUPPORTED" in text:
         return _error("The Gemini API key is invalid. Replace GEMINI_API_KEY in .env with a Google AI Studio API key.")
+    if "RESOURCE_EXHAUSTED" in text or "quota" in text.lower():
+        return _error("This Gemini project has reached its usage limit. Wait for the quota to reset, use another API key, or enable billing.")
     if "429" in text or "RESOURCE_EXHAUSTED" in text:
         return _error("The AI is busy right now. Please wait a minute and try again.")
     return _error("Something went wrong while summarizing. Please try again.")
@@ -187,20 +196,25 @@ def summarize_text(text: str, style: str = DEFAULT_STYLE) -> dict:
         return _friendly_error(exc)
 
 
-def summarize_document(file_bytes: bytes, filename: str, style: str = DEFAULT_STYLE) -> dict:
-    """Summarize an uploaded file (.pdf, .docx, .txt, .md)."""
+def summarize_document(
+    file_bytes: bytes,
+    filename: str,
+    style: str = DEFAULT_STYLE,
+    describe_images: bool = False,
+) -> dict:
+    """Summarize an uploaded document or image."""
     try:
         ext = Path(filename or "").suffix.lower()
         if ext not in SUPPORTED_TYPES:
-            return _error("Sorry, I can only read PDF, Word (.docx), .txt, and .md files.")
+            return _error("Sorry, I can only read PDF, Word, TXT, Markdown, PNG, JPG, and WEBP files.")
         if not file_bytes:
             return _error("That file looks empty.")
         if len(file_bytes) > MAX_FILE_MB * 1024 * 1024:
             return _error(f"That file is too big. Please use one under {MAX_FILE_MB} MB.")
 
-        if ext == ".pdf":
-            # Gemini reads PDFs directly, so no extra library needed
-            content = types.Part.from_bytes(data=file_bytes, mime_type="application/pdf")
+        if ext == ".pdf" or ext in IMAGE_TYPES:
+            mime_type = "application/pdf" if ext == ".pdf" else f"image/{'jpeg' if ext in {'.jpg', '.jpeg'} else ext[1:]}"
+            content = types.Part.from_bytes(data=file_bytes, mime_type=mime_type)
         else:
             if ext == ".docx":
                 text = _read_docx(file_bytes)
@@ -210,6 +224,6 @@ def summarize_document(file_bytes: bytes, filename: str, style: str = DEFAULT_ST
                 return _error("I couldn't find any text in that file.")
             content = text[:MAX_CHARS]
 
-        return _summarize(content, style)
+        return _summarize(content, style, describe_images)
     except Exception as exc:
         return _friendly_error(exc)

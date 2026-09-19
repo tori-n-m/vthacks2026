@@ -30,6 +30,10 @@ h3 { font-size: 1.05rem; margin: 0 0 10px; }
 .drop-zone small, label, select, button, .status { font-family: Arial, sans-serif; }
 .drop-zone small, label { color: var(--muted); font-size: .85rem; }
 select { display: block; width: 100%; padding: 13px 12px; margin: 8px 0 20px; border: 1px solid var(--line); background: white; color: var(--ink); font-size: .95rem; }
+.check-option { display: flex; align-items: flex-start; gap: 10px; margin: 0 0 22px; cursor: pointer; }
+.check-option input { width: 18px; height: 18px; margin: 1px 0 0; accent-color: var(--coral); }
+.check-option span { display: flex; flex-direction: column; gap: 4px; }
+.check-option strong { color: var(--ink); font-size: .95rem; }
 button { border: 0; cursor: pointer; font-weight: 700; }
 #submit-button { background: var(--coral); color: #fff; width: 100%; padding: 15px; font-size: .95rem; }
 #submit-button:hover { background: #d95e49; }

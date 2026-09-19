@@ -18,9 +18,9 @@
       <form id="upload-form" class="panel">
         <div class="step"><span>01</span><h2>Choose a document</h2></div>
         <label class="drop-zone" for="document">
-          <input id="document" name="document" type="file" accept=".pdf,.docx,.txt,.md" required>
+          <input id="document" name="document" type="file" accept=".pdf,.docx,.txt,.md,.png,.jpg,.jpeg,.webp" required>
           <strong id="file-name">Drop a file here or browse</strong>
-          <small>PDF, Word, TXT, or Markdown · up to 10 MB</small>
+          <small>PDF, Word, TXT, Markdown, or image files · up to 25 MB</small>
         </label>
 
         <div class="step"><span>02</span><h2>Set your reading style</h2></div>
@@ -30,14 +30,19 @@
           <option value="dyslexia">Dyslexia-friendly</option>
           <option value="adhd">ADHD-friendly, short and focused</option>
         </select>
+        <label class="check-option" for="describe-images">
+          <input id="describe-images" name="describe_images" type="checkbox">
+          <span><strong>Describe images for screen readers</strong><small>Explain the visible content, layout, labels, text, and data in detail.</small></span>
+        </label>
         <button id="submit-button" type="submit">Generate my versions <span aria-hidden="true">→</span></button>
         <p id="status" class="status" role="status"></p>
       </form>
 
       <section id="results" class="panel results" hidden aria-live="polite">
         <div class="result-heading"><div><p class="eyebrow">YOUR RESULTS</p><h2 id="result-title">Ready</h2></div><button id="download-button" class="download" type="button">Download file ↓</button></div>
-        <div class="summary-block"><h3>Summary</h3><p id="one-sentence"></p><ul id="key-points"></ul></div>
+        <div class="summary-block"><h3>Summary</h3><p id="one-sentence"></p><ul id="key-points"></ul><p id="detailed-summary"></p></div>
         <div class="summary-block"><h3>Important words</h3><ul id="important-words"></ul></div>
+        <div class="summary-block"><h3>Image descriptions</h3><ul id="image-descriptions"></ul></div>
         <div class="summary-block"><h3>Next steps</h3><ul id="next-steps"></ul></div>
         <details><summary>Preview full simplified document</summary><pre id="simplified-document"></pre></details>
       </section>

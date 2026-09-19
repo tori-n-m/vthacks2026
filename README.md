@@ -53,19 +53,12 @@ Then open `.env` and fill in:
 AI_API_KEY=your_key_here
 ```
 > ⚠️ Never commit your real `.env` file. It is already listed in `.gitignore`.
-<<<<<<< HEAD
 3. Install dependencies and start the document tool
 ```bash
-=======
-3. Start the back end
-```bash
-cd backend
->>>>>>> main
 pip install -r requirements.txt
 python app.py
 ```
 The server runs at `http://localhost:5000`.
-<<<<<<< HEAD
 Open that address in a browser. Upload a PDF, Word, TXT, or Markdown document,
 choose a reading style, and generate both a bullet summary and a complete
 plain-language rewrite. The **Download file** button saves both in one text file.
@@ -75,14 +68,10 @@ GET	`/`	Document upload page
 GET	`/styles`	Available reading styles
 POST	`/summarize`	Multipart upload; returns the summary and full rewrite
 POST	`/download`	Returns a downloadable `.txt` containing both outputs
-=======
-4. Start the front end
-Open the `frontend/` folder in VS Code, right-click `index.html`, and choose Open with Live Server. (Or just double-click `index.html` to open it in your browser.)
 🔌 API Endpoints
 Method	Endpoint	What it does
 POST	`/summarize`	Takes text and returns a simplified summary
 POST	`/[endpoint]`	[Describe it]
->>>>>>> main
 Example request:
 ```json
 {

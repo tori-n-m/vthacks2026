@@ -47,6 +47,8 @@ function renderResults(summary, filename) {
   document.querySelector('#result-title').textContent = filename;
   document.querySelector('#one-sentence').textContent = summary.one_sentence;
   fillList('#key-points', summary.key_points);
+  document.querySelector('#detailed-summary').textContent = summary.detailed_summary;
+  fillList('#image-descriptions', summary.image_descriptions.length ? summary.image_descriptions : ['None requested or found']);
   fillList('#important-words', summary.important_words.map((item) => `${item.word}: ${item.meaning}`));
   fillList('#next-steps', summary.next_steps.length ? summary.next_steps : ['None listed']);
   document.querySelector('#simplified-document').textContent = summary.simplified_document;

@@ -17,11 +17,12 @@ def styles():
 def summarize():
     uploaded = request.files.get("document")
     style = request.form.get("style", "general")
+    describe_images = request.form.get("describe_images") == "on"
 
     if uploaded is None or not uploaded.filename:
         return jsonify({"ok": False, "error": "Choose a document to upload."}), 400
 
-    result = summarize_document(uploaded.read(), uploaded.filename, style)
+    result = summarize_document(uploaded.read(), uploaded.filename, style, describe_images)
     if not result["ok"]:
         return jsonify(result), 400
 
@@ -42,6 +43,12 @@ def _download_text(filename: str, summary: dict) -> BytesIO:
         "",
         "SUMMARY",
         f"Main idea: {summary['one_sentence']}",
+        "",
+        "Detailed summary:",
+        summary["detailed_summary"],
+        "",
+        "IMAGE DESCRIPTIONS",
+        *([f"- {description}" for description in summary["image_descriptions"]] or ["- None requested or found"]),
         "",
         "Key points:",
         *[f"- {point}" for point in summary["key_points"]],
