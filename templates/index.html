@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ClearStudy Document Simplifier</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <main class="shell">
+    <header class="intro">
+      <p class="eyebrow">CLEARSTUDY / DOCUMENT TOOL</p>
+      <h1>Make dense documents easier to use.</h1>
+      <p class="lede">Upload a class document for a bullet summary and a complete plain-language rewrite.</p>
+    </header>
+
+    <section class="workspace" aria-label="Document simplifier">
+      <form id="upload-form" class="panel">
+        <div class="step"><span>01</span><h2>Choose a document</h2></div>
+        <label class="drop-zone" for="document">
+          <input id="document" name="document" type="file" accept=".pdf,.docx,.txt,.md" required>
+          <strong id="file-name">Drop a file here or browse</strong>
+          <small>PDF, Word, TXT, or Markdown · up to 10 MB</small>
+        </label>
+
+        <div class="step"><span>02</span><h2>Set your reading style</h2></div>
+        <label for="style">How should the rewrite feel?</label>
+        <select id="style" name="style">
+          <option value="general">General plain language</option>
+          <option value="dyslexia">Dyslexia-friendly</option>
+          <option value="adhd">ADHD-friendly, short and focused</option>
+        </select>
+        <button id="submit-button" type="submit">Generate my versions <span aria-hidden="true">→</span></button>
+        <p id="status" class="status" role="status"></p>
+      </form>
+
+      <section id="results" class="panel results" hidden aria-live="polite">
+        <div class="result-heading"><div><p class="eyebrow">YOUR RESULTS</p><h2 id="result-title">Ready</h2></div><button id="download-button" class="download" type="button">Download file ↓</button></div>
+        <div class="summary-block"><h3>Summary</h3><p id="one-sentence"></p><ul id="key-points"></ul></div>
+        <div class="summary-block"><h3>Important words</h3><ul id="important-words"></ul></div>
+        <div class="summary-block"><h3>Next steps</h3><ul id="next-steps"></ul></div>
+        <details><summary>Preview full simplified document</summary><pre id="simplified-document"></pre></details>
+      </section>
+    </section>
+  </main>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

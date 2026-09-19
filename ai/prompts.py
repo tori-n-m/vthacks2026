@@ -60,6 +60,10 @@ in the order they appear.
 For each, give the word and a simple meaning in a short phrase.
 - next_steps: Things the student needs to do (homework, deadlines, actions) \
 if the document mentions any. Use an empty list if there are none.
+- simplified_document: Rewrite the entire document in the same order. Keep all \
+important facts, names, dates, numbers, headings, and instructions. Keep it as \
+plain text with headings and paragraphs. Do not summarize or leave out sections. \
+Make each sentence easier to read.
 """
 
 

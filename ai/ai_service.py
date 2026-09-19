@@ -17,9 +17,14 @@ Every summarize function NEVER raises an error. It always returns a dict:
         "key_points":      ["...", "..."],
         "important_words": [{"word": "...", "meaning": "..."}],
         "next_steps":      ["...", "..."],
+        "simplified_document": "The complete document rewritten in plain language.",
     }
 
 Keep this shape stable so the front end never breaks.
+
+The `simplified_document` field is the complete document rewritten in plain
+language. It is returned alongside the bullet-point fields so the web app can
+display a preview and create a downloadable file.
 """
 
 import io
@@ -57,7 +62,7 @@ load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 load_dotenv()  # also checks the current folder, doesn't override
 
 # Model name can be changed in .env without editing code
-MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
+MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 
 SUPPORTED_TYPES = {".txt", ".md", ".pdf", ".docx"}
 MAX_FILE_MB = 10
@@ -76,6 +81,7 @@ class DocumentSummary(BaseModel):
     key_points: List[str]
     important_words: List[ImportantWord]
     next_steps: List[str]
+    simplified_document: str
 
 
 # ---------- Small helpers ----------
@@ -131,7 +137,7 @@ def _summarize(document_content, style: str) -> dict:
     if style not in STYLE_LABELS:
         style = DEFAULT_STYLE
 
-    response = _get_client().models.generate_content(
+    response = _generate_with_retry(
         model=MODEL_NAME,
         contents=[get_user_prompt(), document_content],
         config=types.GenerateContentConfig(
@@ -157,6 +163,8 @@ def _friendly_error(exc: Exception) -> dict:
     text = str(exc)
     if "GEMINI_API_KEY" in text:
         return _error("The AI isn't set up yet (missing API key).")
+    if "401" in text or "UNAUTHENTICATED" in text or "ACCESS_TOKEN_TYPE_UNSUPPORTED" in text:
+        return _error("The Gemini API key is invalid. Replace GEMINI_API_KEY in .env with a Google AI Studio API key.")
     if "429" in text or "RESOURCE_EXHAUSTED" in text:
         return _error("The AI is busy right now. Please wait a minute and try again.")
     return _error("Something went wrong while summarizing. Please try again.")
