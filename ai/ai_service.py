@@ -25,6 +25,7 @@ Keep this shape stable so the front end never breaks.
 import io
 import json
 import os
+import time
 from pathlib import Path
 from typing import List
 
@@ -51,11 +52,12 @@ except ImportError:
     )
 
 # Load GEMINI_API_KEY from the .env file in the repo root
+
 load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 load_dotenv()  # also checks the current folder, doesn't override
 
 # Model name can be changed in .env without editing code
-MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
 
 SUPPORTED_TYPES = {".txt", ".md", ".pdf", ".docx"}
 MAX_FILE_MB = 10
@@ -106,6 +108,22 @@ def _read_docx(file_bytes: bytes) -> str:
         for row in table.rows:
             parts.append(" | ".join(cell.text.strip() for cell in row.cells))
     return "\n".join(parts)
+
+RETRY_WAITS = [2, 5, 10]  # seconds to wait between attempts
+
+
+def _generate_with_retry(**kwargs):
+    """Call Gemini, retrying when Google says it's busy (503/429)."""
+    for attempt in range(len(RETRY_WAITS) + 1):
+        try:
+            return _get_client().models.generate_content(**kwargs)
+        except Exception as exc:
+            busy = any(code in str(exc) for code in
+                       ("503", "UNAVAILABLE", "429", "RESOURCE_EXHAUSTED"))
+            if not busy or attempt == len(RETRY_WAITS):
+                raise
+            print(f"[ai_service] Gemini is busy, retrying in {RETRY_WAITS[attempt]}s...")
+            time.sleep(RETRY_WAITS[attempt])
 
 
 def _summarize(document_content, style: str) -> dict:
