@@ -2,12 +2,17 @@ from io import BytesIO
 import json
 from pathlib import Path
 
-from flask import Flask, jsonify, render_template, request, send_file
+from flask import Flask, jsonify, render_template, request, send_file, send_from_directory
 from docx import Document
 
 from ai.ai_service import list_styles, summarize_document, tutor_chat
 
 app = Flask(__name__)
+
+
+@app.get("/images/<path:filename>")
+def image_asset(filename):
+    return send_from_directory(Path(app.root_path) / "images", filename)
 
 
 @app.get("/styles")
