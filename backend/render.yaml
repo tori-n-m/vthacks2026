@@ -3,6 +3,6 @@ services:
     name: backend
     env: python
     plan: starter
-    buildCommand: pip install -r backend/summarize/requirements.txt
+    buildCommand: pip install -r backend/requirements.txt
     startCommand: gunicorn backend.wsgi:application
     autoDeploy: true
