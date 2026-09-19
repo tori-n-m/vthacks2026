@@ -5,8 +5,16 @@ import sys, pathlib
 sys.path.append(str(pathlib.Path(file).resolve().parent.parent))
 from ai.ai_service import summarize_document, list_styles
 
-@app.route("/summarize", methods=["POST"])
-def summarize():
-    file = request.files["document"]
-    style = request.form.get("style", "general")
-    return jsonify(summarize_document(file.read(), file.filename, style))
+@app.route("/summarize", methods=["POST"]) #accept document and style as input, return summarized document
+def summarize(): 
+    file = request.files["document"] #read http request
+    style = request.form.get("style", "general") #read style from form data
+    return jsonify(summarize_document(file.read(), file.filename, style)) #return summarized document as json
+
+@app.route("/styles", methods=["GET"]) #create endpoint to return list of styles
+def styles():
+    return jsonify({"styles": list_styles()}) #call list_styles function and return as json
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    return jsonify({"error": str(e)}), 500
