@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-for ai.ai_service import summarize_document, list_styles
+from ai_service import summarize_document, list_styles
 ai_bp = Blueprint("ai", __name__)
 
 @ai_bp.route("/summarize", methods=["POST"])
