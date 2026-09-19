@@ -14,3 +14,5 @@ app.register_blueprint(ai_bp)
 @app.errorhandler(Exception)
 def handle_exception(e):
     return jsonify({"error": str(e)}), 500
+
+#testing: test if we can push to the github
