@@ -3,5 +3,5 @@ python-dotenv
 gunicorn
 flask-cors
 python-docx
-google-generativeai
+google-generativeai==0.5.2
 protobuf==4.25.3
