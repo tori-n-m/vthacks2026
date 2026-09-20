@@ -3,4 +3,14 @@ python-dotenv
 gunicorn
 flask-cors
 python-docx
-google-generativeai
+
+#Google AI pinned versions
+google-generativeai==0.8.6
+google-ai-generativelanguage==0.6.15
+google-api-core==2.25.2
+google-api-python-client==2.200.0
+google-auth==2.58.0
+protobuf==5.29.6
+grpcio==1.84.0
+grpcio-status==1.75.0
+proto-plus==1.28.4
