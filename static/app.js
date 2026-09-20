@@ -8,6 +8,7 @@ let latestSummary = null;
 let latestFilename = 'document';
 let latestFile = null;
 const tutorHistory = [];
+const sharePrefix = 'reframe-share:';
 
 dyslexiaFont.addEventListener('change', () => {
   document.body.classList.toggle('opendyslexic', dyslexiaFont.checked);
@@ -51,6 +52,43 @@ document.querySelector('#download-button').addEventListener('click', async () =>
   link.click();
   URL.revokeObjectURL(link.href);
 });
+
+document.querySelector('#download-json').addEventListener('click', () => {
+  downloadBlob(JSON.stringify({ filename: latestFilename, summary: latestSummary }, null, 2), 'application/json', '-results.json');
+});
+
+document.querySelector('#download-csv').addEventListener('click', () => {
+  const rows = [['section', 'content'], ['main idea', latestSummary.one_sentence], ['detailed summary', latestSummary.detailed_summary]];
+  latestSummary.key_points.forEach((item) => rows.push(['key point', item]));
+  latestSummary.image_descriptions.forEach((item) => rows.push(['image description', item]));
+  latestSummary.next_steps.forEach((item) => rows.push(['next step', item]));
+  rows.push(['full simplified document', latestSummary.simplified_document]);
+  const csv = rows.map((row) => row.map((value) => `"${String(value ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
+  downloadBlob(csv, 'text/csv;charset=utf-8', '-results.csv');
+});
+
+document.querySelector('#copy-share-link').addEventListener('click', async () => {
+  const shareId = `${sharePrefix}${Date.now()}`;
+  try {
+    localStorage.setItem(shareId, JSON.stringify({ filename: latestFilename, summary: latestSummary }));
+  } catch {}
+  const link = `${window.location.origin}${window.location.pathname}#${shareId}`;
+  try {
+    await navigator.clipboard.writeText(link);
+    status.textContent = 'Share link copied. It opens this saved result in this browser.';
+  } catch {
+    status.textContent = `Copy this share link: ${link}`;
+  }
+});
+
+function downloadBlob(content, type, suffix) {
+  const blob = new Blob([content], { type });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `${latestFilename.replace(/\.[^.]+$/, '')}${suffix}`;
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
 
 function renderResults(summary, filename) {
   document.querySelector('#result-title').textContent = filename;

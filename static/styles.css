@@ -364,6 +364,44 @@ button {
   mix-blend-mode: screen; 
 }
 
+.export-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 16px 0 4px;
+}
+
+.export-tools button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 46px;
+  border: 1px solid var(--slate);
+  background: white;
+  color: var(--slate);
+  padding: 8px 12px;
+  font-size: .78rem;
+}
+
+.export-tools .export-word {
+  background: var(--slate);
+  color: white;
+}
+
+.export-tools button img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  mix-blend-mode: screen;
+}
+
+.export-tools button:hover,
+.export-tools button:focus-visible {
+  background: var(--slate);
+  color: white;
+}
+
 .summary-block { 
   padding: 20px 0; 
   border-bottom: 1px solid var(--line); 
