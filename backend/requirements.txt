@@ -3,3 +3,4 @@ python-dotenv
 gunicorn
 flask-cors
 python-docx
+google-generativeai
