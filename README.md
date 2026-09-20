@@ -17,7 +17,7 @@ View Here: https://reframeai-vtty.onrender.com/
 ![Gemini](https://img.shields.io/badge/Google_Gemini-API-4285F4?logo=googlegemini&logoColor=white)
 ![VTHacks](https://img.shields.io/badge/VTHacks-14-861F41)
 
-[Watch the demo](#-demo-time) · [Run it locally](#-run-it-yourself) · [How it works](#-how-it-works) · [Meet the team](#-team-maneframe)
+[Run it locally](#-run-it-yourself) · [How it works](#-how-it-works) · [Meet the team](#-team-maneframe)
 
 </div>
 
@@ -47,11 +47,7 @@ For students with **ADHD**, **dyslexia**, and other learning disabilities, that 
 
 ## 🎬 Demo time!
 
-[![ReframeAI demo preview: uploading a document, generating simplified results, and chatting with the Socratic tutor](docs/demo-preview.gif)](docs/reframeai-demo.mp4)
-
-**▶️ [Watch the full 4-minute demo](docs/reframeai-demo.mp4)** (click the preview above too, we won't tell).
-
-In the full walkthrough we:
+[![ReframeAI demo preview: uploading a document, generating simplified results, and chatting with the Socratic tutor]
 
 1. Upload a real PDF ("How To Make an Ethernet Cable") and generate a plain-language version.
 2. Flip on **OpenDyslexic** and watch the whole UI change.
@@ -225,8 +221,6 @@ Most "AI for studying" boils down to *paste question, copy answer, learn nothing
 | **Jordan Banda** | Back-End Developer |
 | **Racil Vordemberge** | Front-End Developer + Logo Design |
 | **Bryce Yang** | UI/UX Designer |
-
-*(Yes, the name is a pun: **mane** + **frame**. Hence the knight.)*
 
 ## 🔮 What's next
 
