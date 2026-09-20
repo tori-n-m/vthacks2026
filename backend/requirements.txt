@@ -4,3 +4,4 @@ gunicorn
 flask-cors
 python-docx
 google-generativeai
+protobuf==4.25.3
