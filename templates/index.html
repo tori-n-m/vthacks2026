@@ -52,7 +52,18 @@
       </form>
 
       <section id="results" class="panel results" hidden aria-live="polite">
-        <div class="result-heading"><div><p class="eyebrow">YOUR RESULTS</p><h2 id="result-title">Ready</h2></div><button id="download-button" class="download" type="button"><img src="{{ url_for('image_asset', filename='downloadinstructions.png') }}" alt=""> Download Word file</button></div>
+        <div class="metrics-bar" aria-label="Session metrics">
+          <div><strong id="requests-processed">0</strong><span>Requests processed</span></div>
+          <div><strong id="time-saved">0 min</strong><span>Estimated time saved</span></div>
+          <div><strong id="confidence-score">--</strong><span>Content confidence</span></div>
+        </div>
+        <div class="result-heading"><div><p class="eyebrow">YOUR RESULTS</p><h2 id="result-title">Ready</h2></div></div>
+        <div class="export-tools" aria-label="Export and share results">
+          <button id="download-button" class="export-button export-word" type="button"><img src="{{ url_for('image_asset', filename='downloadinstructions.png') }}" alt=""> Download Word file</button>
+          <button id="download-json" type="button">Download JSON</button>
+          <button id="download-csv" type="button">Download CSV</button>
+          <button id="copy-share-link" type="button">Copy share link</button>
+        </div>
         <div class="summary-block takeaway"><h3>Main idea</h3><p id="one-sentence"></p></div>
         <details class="summary-block">
           <summary>Detailed summary</summary>
