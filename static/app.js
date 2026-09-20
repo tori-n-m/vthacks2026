@@ -8,7 +8,6 @@ let latestSummary = null;
 let latestFilename = 'document';
 let latestFile = null;
 const tutorHistory = [];
-const sharePrefix = 'reframe-share:';
 
 dyslexiaFont.addEventListener('change', () => {
   document.body.classList.toggle('opendyslexic', dyslexiaFont.checked);
@@ -65,20 +64,6 @@ document.querySelector('#download-csv').addEventListener('click', () => {
   rows.push(['full simplified document', latestSummary.simplified_document]);
   const csv = rows.map((row) => row.map((value) => `"${String(value ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
   downloadBlob(csv, 'text/csv;charset=utf-8', '-results.csv');
-});
-
-document.querySelector('#copy-share-link').addEventListener('click', async () => {
-  const shareId = `${sharePrefix}${Date.now()}`;
-  try {
-    localStorage.setItem(shareId, JSON.stringify({ filename: latestFilename, summary: latestSummary }));
-  } catch {}
-  const link = `${window.location.origin}${window.location.pathname}#${shareId}`;
-  try {
-    await navigator.clipboard.writeText(link);
-    status.textContent = 'Share link copied. It opens this saved result in this browser.';
-  } catch {
-    status.textContent = `Copy this share link: ${link}`;
-  }
 });
 
 function downloadBlob(content, type, suffix) {
