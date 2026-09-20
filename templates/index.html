@@ -4,12 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ClearStudy Document Simplifier</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="../static/styles.css">
+  <script src="../static/app.js" defer></script>
 </head>
 <body>
   <header class="site-header">
     <div class="brand" aria-label="reframeAI by ManeFrame"><strong>reframeAI</strong><span>by ManeFrame</span></div>
-    <img class="knight-mark" src="{{ url_for('image_asset', filename='knight.png') }}" alt="Mane Frame knight logo">
+    <img class="knight-mark" src="../images/knight.png" alt="The ManeFrame logo, a navy blue knight chess piece with a golden frame around it.">
   </header>
   <main class="shell">
     <section class="hero">
@@ -23,7 +24,7 @@
         <div class="step"><span>01</span><h2>Upload your document</h2></div>
         <label class="drop-zone" for="document">
           <input id="document" name="document" type="file" accept=".pdf,.docx,.txt,.md,.png,.jpg,.jpeg,.webp" required>
-          <img src="{{ url_for('image_asset', filename='uploadbutton.png') }}" alt="" class="control-art upload-art">
+          <img src="../images/uploadbutton.png" alt="A white uploadbutton with a plus sign" class="control-art upload-art">
           <strong id="file-name">Choose a file to upload</strong>
           <small>PDF, Word, TXT, Markdown, or image files · up to 25 MB</small>
         </label>
@@ -47,12 +48,12 @@
           <span class="tutor-checkmark" aria-hidden="true"></span>
           <span><strong>Socratic tutor mode</strong><small>Get guided questions and hints that help you discover the document's ideas without giving away the answers.</small></span>
         </label>
-        <button id="submit-button" type="submit"><img src="{{ url_for('image_asset', filename='sparkle.png') }}" alt=""> Generate my versions <span aria-hidden="true">→</span></button>
+        <button id="submit-button" type="submit"><img src="../images/sparkle.png" alt="A picture of a document with sparkles around it."> Generate my versions <span aria-hidden="true">→</span></button>
         <p id="status" class="status" role="status"></p>
       </form>
 
       <section id="results" class="panel results" hidden aria-live="polite">
-        <div class="result-heading"><div><p class="eyebrow">YOUR RESULTS</p><h2 id="result-title">Ready</h2></div><button id="download-button" class="download" type="button"><img src="{{ url_for('image_asset', filename='downloadinstructions.png') }}" alt=""> Download Word file</button></div>
+        <div class="result-heading"><div><p class="eyebrow">YOUR RESULTS</p><h2 id="result-title">Ready</h2></div><button id="download-button" class="download" type="button"><img src="../images/downloadinstructions.png" alt="An image of a cursor dragging a document into the download button."> Download Word file</button></div>
         <div class="summary-block takeaway"><h3>Main idea</h3><p id="one-sentence"></p></div>
         <details class="summary-block">
           <summary>Detailed summary</summary>
@@ -100,6 +101,6 @@
     <div><strong>reframeAI</strong><span>by ManeFrame</span></div>
     <p>Accessible tools for clearer learning.</p>
   </footer>
-  <script src="{{ url_for('static', filename='app.js') }}"></script>
+  
 </body>
 </html>
