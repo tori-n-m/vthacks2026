@@ -49,6 +49,8 @@ For students with **ADHD**, **dyslexia**, and other learning disabilities, that 
 
 [![ReframeAI demo preview: uploading a document, generating simplified results, and chatting with the Socratic tutor]
 
+view demo: https://youtu.be/rN9LfOILVF4
+
 1. Upload a real PDF ("How To Make an Ethernet Cable") and generate a plain-language version.
 2. Flip on **OpenDyslexic** and watch the whole UI change.
 3. Turn on **Socratic tutor mode** and get *guided questions* instead of spoilers.
